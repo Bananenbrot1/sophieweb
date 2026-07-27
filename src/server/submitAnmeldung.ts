@@ -1,52 +1,61 @@
 import { createServerFn } from '@tanstack/react-start'
 import { anmeldungSchema } from '../lib/anmeldung-schema'
 
-const MIYA_URL = 'https://login.miya360.de/apps/call/portal/anmeldung'
-
 export const submitAnmeldung = createServerFn({ method: 'POST' })
   .validator(anmeldungSchema)
   .handler(async ({ data }) => {
-    const token = process.env.MIYA_TOKEN
-    const user = process.env.MIYA_USER
+    const idKurs = process.env.MIYA_KURS_ID
+    const slug = process.env.MIYA_PORTAL_SLUG || 'hebamme-sophie'
 
-    if (!token || !user) {
+    if (!idKurs) {
       throw new Error(
         'Anmeldung ist derzeit nicht konfiguriert. Bitte später erneut versuchen.',
       )
     }
 
+    const url = `https://login.miya360.de/apps/mymiya/${slug}/course-portal/course/${idKurs}/register`
+
+    const streetMatch = data.strasse.match(/^(.*?)(?:\s+(\d+\s*[a-zA-Z]?))?$/)
+
     const payload = {
-      token,
-      user,
-      vorname: data.vorname,
-      nachname: data.nachname,
-      strasse: data.strasse,
-      plz: data.plz,
-      ort: data.ort,
-      telefonNummer: data.telefon || '',
+      firstname: data.vorname,
+      lastname: data.nachname,
+      birthdate: data.geburtsdatum,
+      street: streetMatch?.[1]?.trim() || data.strasse,
+      streetNumber: streetMatch?.[2]?.trim() || '',
+      postalCode: data.plz,
+      city: data.ort,
+      stateId: 'BY',
       email: data.email,
-      geburtsdatum: data.geburtsdatum,
-      versicherungsart: data.versicherungsart === 'gesetzlich' ? 'G' : 'P',
-      kassenik: data.kassenik,
-      versichertennummer: data.versichertennummer,
-      entbindungstermin: data.entbindungstermin || '',
-      geburtsdatumkind: '',
-      para: String(data.para).slice(0, 1),
-      gravida: String(data.gravida).slice(0, 1),
-      bemerkung: data.bemerkung || '',
+      phoneNumber: data.telefon || '',
+      insuranceType: data.versicherungsart === 'gesetzlich' ? 'G' : 'P',
+      insuranceNumber: data.kassenik,
+      insuranceName: '',
+      insurantNumber: data.versichertennummer,
+      etDate: data.entbindungstermin || '',
+      childBirthDate: '',
     }
 
-    const response = await fetch(MIYA_URL, {
+    console.log('miya request', { url, payload })
+
+    const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(payload),
     })
 
     const text = await response.text()
+    console.log('miya response', {
+      status: response.status,
+      body: text,
+    })
 
-    if (!response.ok || !text.includes('OK')) {
+    if (!response.ok) {
       throw new Error(
-        'Anmeldung fehlgeschlagen. Bitte prüfe die IK-Nummer und versuche es erneut.',
+        'Anmeldung fehlgeschlagen. Bitte prüfe die Angaben und versuche es erneut.',
       )
     }
 
