@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { anmeldungSchema } from '../lib/anmeldung-schema'
+import { sendAnmeldungEmail } from './sendAnmeldungEmail'
 
 export const submitAnmeldung = createServerFn({ method: 'POST' })
   .validator(anmeldungSchema)
@@ -57,6 +58,12 @@ export const submitAnmeldung = createServerFn({ method: 'POST' })
       throw new Error(
         'Anmeldung fehlgeschlagen. Bitte prüfe die Angaben und versuche es erneut.',
       )
+    }
+
+    try {
+      await sendAnmeldungEmail(data)
+    } catch (err) {
+      console.error('Failed to send Anmeldung notification email', err)
     }
 
     return { ok: true as const }
