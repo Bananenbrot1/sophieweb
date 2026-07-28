@@ -7,7 +7,16 @@ const fieldClass =
   'w-full px-4 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700 text-stone-800 transition-all'
 
 const labelClass =
+  'block text-xs uppercase tracking-wider text-stone-500 font-bold mb-1.5 min-h-[2.5rem] leading-snug'
+
+const legendClass =
   'block text-xs uppercase tracking-wider text-stone-500 font-bold mb-1.5'
+
+function tomorrowIsoDate() {
+  const d = new Date()
+  d.setDate(d.getDate() + 1)
+  return d.toISOString().slice(0, 10)
+}
 
 export function AnmeldungForm() {
   const submit = useServerFn(submitAnmeldung)
@@ -127,15 +136,16 @@ export function AnmeldungForm() {
       <div className="grid sm:grid-cols-2 gap-5">
         <Field label="Telefon" name="telefon" type="tel" />
         <Field
-          label="Voraussichtlicher Entbindungstermin"
+          label="Entbindungstermin"
           name="entbindungstermin"
           type="date"
+          min={tomorrowIsoDate()}
           error={fieldErrors.entbindungstermin}
         />
       </div>
 
       <fieldset>
-        <legend className={labelClass}>Versicherungsart *</legend>
+        <legend className={legendClass}>Versicherungsart *</legend>
         <div className="flex gap-6 pt-1">
           <label className="flex items-center gap-2 text-sm text-stone-700">
             <input
@@ -181,7 +191,7 @@ export function AnmeldungForm() {
 
       <div className="grid sm:grid-cols-2 gap-5">
         <Field
-          label="Bisherige Schwangerschaften (inkl. jetziger) *"
+          label="Schwangerschaften (inkl. jetziger) *"
           name="para"
           type="number"
           min={1}
@@ -201,7 +211,7 @@ export function AnmeldungForm() {
       </div>
 
       <div>
-        <label htmlFor="bemerkung" className={labelClass}>
+        <label htmlFor="bemerkung" className={legendClass}>
           Bemerkung
         </label>
         <textarea
@@ -269,7 +279,7 @@ function Field({
   error?: string
   inputMode?: HTMLAttributes<HTMLInputElement>['inputMode']
   pattern?: string
-  min?: number
+  min?: number | string
   max?: number
 }) {
   return (

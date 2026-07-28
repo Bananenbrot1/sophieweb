@@ -22,10 +22,17 @@ export const anmeldungSchema = z
       .min(1, 'Bitte Versichertennummer eingeben'),
     entbindungstermin: z
       .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Ungültiger Entbindungstermin')
-      .or(z.literal(''))
-      .optional()
-      .default(''),
+      .default('')
+      .refine(
+        (val) => val === '' || /^\d{4}-\d{2}-\d{2}$/.test(val),
+        'Ungültiger Entbindungstermin',
+      )
+      .refine((val) => {
+        if (!val) return true
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        return new Date(`${val}T00:00:00`) > today
+      }, 'Entbindungstermin muss in der Zukunft liegen'),
     para: z.coerce
       .number()
       .int()
