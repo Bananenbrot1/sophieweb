@@ -15,12 +15,19 @@ export function Header() {
     <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FCFBF9]/90 border-b border-stone-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex flex-col">
-            <span className="text-xl font-bold tracking-tight text-emerald-950">
-              Sophie Mesenich
-            </span>
-            <span className="text-[10px] tracking-widest uppercase text-emerald-700 font-semibold">
-              Hebamme in München Schwabing
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src="/images/logo.svg"
+              alt="Logo Sophie Mesenich"
+              className="h-11 w-11"
+            />
+            <span className="flex flex-col">
+              <span className="text-xl font-bold tracking-tight text-emerald-950">
+                Sophie Mesenich
+              </span>
+              <span className="text-[10px] tracking-widest uppercase text-emerald-700 font-semibold">
+                Hebamme in München Schwabing
+              </span>
             </span>
           </Link>
 
