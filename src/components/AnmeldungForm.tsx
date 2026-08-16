@@ -136,7 +136,7 @@ export function AnmeldungForm() {
       <div className="grid sm:grid-cols-2 gap-5">
         <Field label="Telefon" name="telefon" type="tel" />
         <Field
-          label="Entbindungstermin"
+          label="Errechneter Termin"
           name="entbindungstermin"
           type="date"
           min={tomorrowIsoDate()}
