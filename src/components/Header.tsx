@@ -5,7 +5,7 @@ const navLinks = [
   { href: '/#ueber-mich', label: 'Über mich' },
   { href: '/#leistungen', label: 'Leistungen' },
   { href: '/#betreuungsgebiet', label: 'Betreuungsradius' },
-  { href: '/#kontakt', label: 'Betreuungsanmeldung' },
+  { href: '/#kontakt', label: 'Betreuungsanfrage' },
 ] as const
 
 export function Header() {
