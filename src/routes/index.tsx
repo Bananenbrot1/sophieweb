@@ -155,7 +155,7 @@ function AboutSection() {
               href="#kontakt"
               className="text-center px-6 py-3 bg-emerald-900 text-white text-sm font-semibold rounded-lg hover:bg-emerald-950 transition-all"
             >
-              Betreuungsanmeldung
+              Betreuungsanfrage
             </a>
             <a
               href="#leistungen"
@@ -437,7 +437,7 @@ function KontaktSection() {
               Anmeldung
             </span>
             <h2 className="text-3xl text-stone-900 font-normal">
-              Betreuungsanmeldung
+              Betreuungsanfrage
             </h2>
             <p className="text-sm text-stone-600 leading-relaxed">
               Schicke mir deine Anfrage ganz bequem über dieses Formular. Bitte
